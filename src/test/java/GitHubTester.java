@@ -18,7 +18,7 @@ public class GitHubTester {
     private String repository = "testZhuravel/qa.guru_lesson04";
     private String issueName = "QAGURULessonFour";
     private String userLogin = "testZhuravel";
-    private String userPass = "Ss77777_";
+    private String userPass = "Xx00000_";
     private String tagName = "    None yet";
 
     private Steps steps = new Steps();
