@@ -13,18 +13,18 @@ import static io.qameta.allure.Allure.*;
 
 @Owner("zhuravel")
 @Feature("Работа с задачами")
-public class GitHubTester {
+public class GitHubTests {
     private String baseUrl = "https://github.com";
     private String repository = "testZhuravel/qa.guru_lesson04";
     private String issueName = "QAGURULessonFour";
     private String userLogin = "testZhuravel";
-    private String userPass = "Xx00000_";
+    private String userPass = "Ss77777_";
     private String tagName = "    None yet";
 
     private Steps steps = new Steps();
 
     @BeforeAll
-    public void initLogger() {
+    public static void initLogger() {
         SelenideLogger.addListener("allure", new AllureSelenide()
                 .savePageSource(true)
                 .screenshots(true));
@@ -33,11 +33,6 @@ public class GitHubTester {
     @AfterEach
     public void closeDriver() {
         closeWebDriver();
-    }
-
-    @AfterAll
-    static void tearDownAll() {
-        SelenideLogger.removeListener("allure");
     }
 
     // 1. Чистый Selenide + Чистый Rest-Assured c листенерами
@@ -51,20 +46,20 @@ public class GitHubTester {
         open(baseUrl);
 
         $(by("href", "/login")).click();
-        $(by("id", "login_field")).val(userLogin);
-        $(by("id", "password")).val(userPass);
+        $("#login_field").val(userLogin);
+        $("#password").val(userPass);
         $(".btn-primary").click();
         $(".header-search-input").click();
         $(".header-search-input").sendKeys(repository);
         $(".header-search-input").submit();
         $(By.linkText(repository)).click();
         $(by("data-content", "Issues")).click();
-        $x("//*[@id=\"js-repo-pjax-container\"]/div[3]/div/div/div[2]/div[2]/a").click();
-        $(by("id", "issue_title")).val(issueName);
+        $(".btn-primary", 2).click();
+        $("#issue_title").val(issueName);
         $(byText("Submit new issue")).click();
 
         $(".js-issue-title").shouldHave(text(issueName));
-        $x("//*[@id=\"partial-discussion-header\"]/div[3]/div[2]/a").shouldHave(text(userLogin));
+        $(withText("opened this issue")).shouldHave(text(userLogin));
         $(".js-issue-labels").shouldHave(text(tagName));
     }
 
@@ -84,8 +79,8 @@ public class GitHubTester {
             $(by("href", "/login")).click();
         });
         step("Авторизовать Пользователя", () -> {
-            $(by("id", "login_field")).val(userLogin);
-            $(by("id", "password")).val(userPass);
+            $("#login_field").val(userLogin);
+            $("#password").val(userPass);
             $(".btn-primary").click();
         });
 
@@ -101,10 +96,10 @@ public class GitHubTester {
             $(by("data-content", "Issues")).click();
         });
         step("Нажать кнопку 'New issue'", () -> {
-            $x("//*[@id=\"js-repo-pjax-container\"]/div[3]/div/div/div[2]/div[2]/a").click();
+            $(".btn-primary", 2).click();
         });
         step("Создать новое Issue" + issueName, () -> {
-            $(by("id", "issue_title")).val(issueName);
+            $("#issue_title").val(issueName);
             $(byText("Submit new issue")).click();
         });
 
@@ -112,7 +107,7 @@ public class GitHubTester {
             $(".js-issue-title").shouldHave(text(issueName));
         });
         step("Проверить правильность указания логина исполнителя", () -> {
-            $x("//*[@id=\"partial-discussion-header\"]/div[3]/div[2]/a").shouldHave(text(userLogin));
+            $(withText("opened this issue")).shouldHave(text(userLogin));
         });
         step("Проверить правильность указания тега", () -> {
             $(".js-issue-labels").shouldHave(text(tagName));

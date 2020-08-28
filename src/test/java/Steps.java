@@ -2,8 +2,7 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.by;
-import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 
 public class Steps {
@@ -22,8 +21,8 @@ public class Steps {
 
     @Step("Авторизовать Пользователя")
     public void authorizeUser(String userLogin, String userPass) {
-        $(by("id", "login_field")).val(userLogin);
-        $(by("id", "password")).val(userPass);
+        $("#login_field").val(userLogin);
+        $("#password").val(userPass);
         $(".btn-primary").click();
     }
 
@@ -46,12 +45,12 @@ public class Steps {
 
     @Step("Нажать кнопку 'New issue'")
     public void pressNewIssueButton() {
-        $x("//*[@id=\"js-repo-pjax-container\"]/div[3]/div/div/div[2]/div[2]/a").click();
+        $(".btn-primary", 2).click();
     }
 
     @Step("Создать новое Issue")
     public void createNewIssue(String issueName) {
-        $(by("id", "issue_title")).val(issueName);
+        $("#issue_title").val(issueName);
         $(byText("Submit new issue")).click();
     }
 
@@ -62,7 +61,7 @@ public class Steps {
 
     @Step("Проверить правильность указания логина исполнителя")
     public void checkUserLogin(String userLogin) {
-        $x("//*[@id=\"partial-discussion-header\"]/div[3]/div[2]/a").shouldHave(text(userLogin));
+        $(withText("opened this issue")).shouldHave(text(userLogin));
     }
 
     @Step("Проверить правильность указания тега")
